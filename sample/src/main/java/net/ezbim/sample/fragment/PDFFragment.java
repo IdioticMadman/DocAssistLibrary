@@ -33,9 +33,11 @@ public class PDFFragment extends Fragment {
     private Context mContext;
     private File pdfFolder;
     private PDFViewPager pdfViewPager;
+    private File destinationFile;
 
     public PDFFragment() {
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class PDFFragment extends Fragment {
         if (!pdfFolder.exists()) {
             pdfFolder.mkdirs();
         }
+        destinationFile = new File(pdfFolder, pdfFileName);
         mContext = getActivity();
     }
 
@@ -60,25 +63,33 @@ public class PDFFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        CopyAsset copyAsset = new CopyAssetThreadImpl(getActivity().getApplicationContext(), new Handler(), new CopyAsset.Listener() {
-            @Override
-            public void success(String assetName, String destinationPath) {
-                pdfViewPager = new PDFViewPager(mContext, getPDFPathOnSD());
-                fl_pdf.removeAllViews();
-                fl_pdf.addView(pdfViewPager);
-            }
+        if (destinationFile.exists()) {
+            setPDFViewPager();
+        } else {
+            CopyAsset copyAsset = new CopyAssetThreadImpl(getActivity().getApplicationContext(), new Handler(), new CopyAsset.Listener() {
+                @Override
+                public void success(String assetName, String destinationPath) {
+                    setPDFViewPager();
+                }
 
-            @Override
-            public void failure(Exception e) {
-                Log.e(TAG, "failure: " + e.toString());
-                Toast.makeText(mContext, "文件拷贝出错", Toast.LENGTH_SHORT).show();
-            }
-        });
-        copyAsset.copy(pdfFileName, getPDFPathOnSD());
+                @Override
+                public void failure(Exception e) {
+                    Log.e(TAG, "failure: " + e.toString());
+                    Toast.makeText(mContext, "文件拷贝出错", Toast.LENGTH_SHORT).show();
+                }
+            });
+            copyAsset.copy(pdfFileName, getPDFPathOnSD());
+        }
+    }
+
+    private void setPDFViewPager() {
+        pdfViewPager = new PDFViewPager(mContext, getPDFPathOnSD());
+        fl_pdf.removeAllViews();
+        fl_pdf.addView(pdfViewPager);
     }
 
     private String getPDFPathOnSD() {
-        return new File(pdfFolder, pdfFileName).getAbsolutePath();
+        return destinationFile.getAbsolutePath();
     }
 
     @Override

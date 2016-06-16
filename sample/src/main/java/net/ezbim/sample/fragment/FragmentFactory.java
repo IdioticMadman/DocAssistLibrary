@@ -7,19 +7,23 @@ import java.util.Map;
 
 public class FragmentFactory {
 
+    public static final int PDFFragment = 0;
+    public static final int TxtFragment = 1;
+    public static final int PictureFragment = 2;
+    public static final int OfficeFragment = 3;
     private static Map<Integer, Fragment> mFragments = new HashMap<>();
 
     public static Fragment createFragment(int position) {
         Fragment fragment = null;
         fragment = mFragments.get(position);  //在集合中取出来Fragment
         if (fragment == null) {  //如果再集合中没有取出来 需要重新创建
-            if (position == 0) {
+            if (position == PDFFragment) {
                 fragment = new PDFFragment();
-            } else if (position == 1) {
+            } else if (position == TxtFragment) {
                 fragment = new TxtFragment();
-            } else if (position == 2) {
+            } else if (position == PictureFragment) {
                 fragment = new PictureFragment();
-            } else if (position == 3) {
+            } else if (position == OfficeFragment) {
                 fragment = new OfficeFragment();
             }
             if (fragment != null) {

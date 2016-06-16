@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import net.ezbim.docassist.R;
+import net.ezbim.docassist.image.PhotoViewAttacher;
 
 import java.lang.ref.WeakReference;
 
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * @author robert
@@ -21,7 +21,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * @time 2016/6/15.
  * @description net.ezbim.docassist.pdf.bean
  */
-public class PDFPagerAdapter extends BasePDFPagerAdapter{
+public class PDFPagerAdapter extends BasePDFPagerAdapter {
     SparseArray<WeakReference<PhotoViewAttacher>> attachers;
 
     public PDFPagerAdapter(Context context, String pdfPath, int offScreenSize) {
@@ -35,7 +35,7 @@ public class PDFPagerAdapter extends BasePDFPagerAdapter{
         View v = inflater.inflate(R.layout.view_pdf_page, container, false);
         ImageView iv = (ImageView) v.findViewById(R.id.imageView);
 
-        if(renderer == null || getCount() < position)
+        if (renderer == null || getCount() < position)
             return v;
 
         PdfRenderer.Page page = getPDFPage(renderer, position);
@@ -58,7 +58,7 @@ public class PDFPagerAdapter extends BasePDFPagerAdapter{
     @Override
     public void close() {
         super.close();
-        if(attachers != null){
+        if (attachers != null) {
             attachers.clear();
             attachers = null;
         }
