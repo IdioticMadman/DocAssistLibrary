@@ -3,10 +3,7 @@ package net.ezbim.sample;
 import android.app.Application;
 
 /**
- * @author robert
- * @version 1.0
- * @time 2016/6/15.
- * @description
+ * Created by robert on 2016/6/16.
  */
 public class app extends Application {
     @Override

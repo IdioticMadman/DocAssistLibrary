@@ -18,8 +18,8 @@ import net.ezbim.docassist.pdf.view.PDFViewPager;
 import net.ezbim.docassist.utils.CopyAsset;
 import net.ezbim.docassist.utils.CopyAssetThreadImpl;
 import net.ezbim.sample.Common;
-import net.ezbim.sample.activity.MainActivity;
 import net.ezbim.sample.R;
+import net.ezbim.sample.activity.MainActivity;
 
 import java.io.File;
 
@@ -45,7 +45,8 @@ public class PDFFragment extends Fragment {
         setHasOptionsMenu(true);
         pdfFolder = new File(Common.pdfPathFolder);
         if (!pdfFolder.exists()) {
-            pdfFolder.mkdirs();
+            boolean mkdirs = pdfFolder.mkdirs();
+            Log.e(TAG, "创建文件夹是否成功:" + mkdirs);
         }
         destinationFile = new File(pdfFolder, pdfFileName);
         mContext = getActivity();
@@ -95,10 +96,12 @@ public class PDFFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        BasePDFPagerAdapter adapter = (BasePDFPagerAdapter) pdfViewPager.getAdapter();
-        if (adapter != null) {
-            adapter.close();
-            adapter = null;
+        if (pdfViewPager != null) {
+            BasePDFPagerAdapter adapter = (BasePDFPagerAdapter) pdfViewPager.getAdapter();
+            if (adapter != null) {
+                adapter.close();
+                adapter = null;
+            }
         }
     }
 }
