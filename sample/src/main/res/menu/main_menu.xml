@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/pdf"
+        android:title="PDFDemo"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/txt"
+        android:title="TxTDemo"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/pic"
+        android:title="PictureDemo"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/office"
+        android:title="OfficeDemo"
+        app:showAsAction="never" />
+</menu>
