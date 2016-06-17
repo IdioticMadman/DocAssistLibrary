@@ -15,15 +15,17 @@ import java.io.InputStreamReader;
  * @description
  */
 public class TxTUtil {
-    public static String getText(Context context, String txtPath) {
+    public static String getText(Context context, String txtPath, String fileIncode) {
         try {
             InputStream is = new FileInputStream(txtPath);
-            InputStreamReader isr = new InputStreamReader(is, "utf-8");
-            BufferedReader br = new BufferedReader(isr);
+            InputStreamReader isr = new InputStreamReader(is, fileIncode);
+            BufferedReader br = new BufferedReader(isr, 16 * 1024);//128K缓冲读取
             StringBuilder sb = new StringBuilder();
             String line;
-            while ((line = br.readLine()) != null) {
+            int index = 0;
+            while (index < 50 && (line = br.readLine()) != null) {
                 sb.append(line).append("\n");
+                index++;
             }
             br.close();
             isr.close();

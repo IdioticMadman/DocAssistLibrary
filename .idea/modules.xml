@@ -3,11 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DocAssistLibrary.iml" filepath="$PROJECT_DIR$/DocAssistLibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sample/app.iml" filepath="$PROJECT_DIR$/sample/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/docassistlibrary/docassistlibrary.iml" filepath="$PROJECT_DIR$/docassistlibrary/docassistlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/photosample/photosample.iml" filepath="$PROJECT_DIR$/photosample/photosample.iml" />
-      <module fileurl="file://$PROJECT_DIR$/photosample/photosample.iml" filepath="$PROJECT_DIR$/photosample/photosample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reader/reader.iml" filepath="$PROJECT_DIR$/reader/reader.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/textreader/textreader.iml" filepath="$PROJECT_DIR$/textreader/textreader.iml" />
     </modules>
   </component>
 </project>
