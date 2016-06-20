@@ -1,62 +1,55 @@
 package net.ezbim.sample.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
 
 import net.ezbim.sample.R;
-import net.ezbim.sample.fragment.FragmentFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fl_content, FragmentFactory.createFragment(FragmentFactory.PDFFragment))
-                .commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.pdf:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fl_content, FragmentFactory.createFragment(FragmentFactory.PDFFragment))
-                        .commit();
-                return true;
-            case R.id.txt:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fl_content, FragmentFactory.createFragment(FragmentFactory.TxtFragment))
-                        .commit();
-                return true;
-            case R.id.pic:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fl_content, FragmentFactory.createFragment(FragmentFactory.PictureFragment))
-                        .commit();
-                return true;
-            case R.id.office:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fl_content, FragmentFactory.createFragment(FragmentFactory.OfficeFragment))
-                        .commit();
-                return true;
+        mContext = MainActivity.this;
+        TypedValue tv = new TypedValue();
+        if (mContext.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            int actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, mContext.getResources().getDisplayMetrics());
+            Log.e(TAG, "onCreate: actionBarHeight" + actionBarHeight);
         }
-
-        return super.onOptionsItemSelected(item);
     }
+
+    public void pdf(View v) {
+
+        mContext.startActivity(new Intent(mContext, PDFActivity.class));
+    }
+
+    public void pdfview(View v) {
+
+        mContext.startActivity(new Intent(mContext, PDfViewActivity.class));
+    }
+
+    public void txt(View v) {
+
+        mContext.startActivity(new Intent(mContext, TxtDemoActivity.class));
+    }
+
+    public void picture(View v) {
+
+        mContext.startActivity(new Intent(mContext, PictureActivity.class));
+    }
+
+    public void office(View v) {
+
+        mContext.startActivity(new Intent(mContext, OfficeActivity.class));
+    }
+
 }

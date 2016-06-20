@@ -1,2 +1,1 @@
-include ':sample', ':docassistlibrary', ':photosample', ':textreader'
-include ':reader'
+include ':sample', ':docassistlibrary', ':photosample'

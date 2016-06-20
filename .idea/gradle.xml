@@ -11,9 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/docassistlibrary" />
             <option value="$PROJECT_DIR$/photosample" />
-            <option value="$PROJECT_DIR$/reader" />
             <option value="$PROJECT_DIR$/sample" />
-            <option value="$PROJECT_DIR$/textreader" />
           </set>
         </option>
         <option name="myModules">
@@ -21,9 +19,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/docassistlibrary" />
             <option value="$PROJECT_DIR$/photosample" />
-            <option value="$PROJECT_DIR$/reader" />
             <option value="$PROJECT_DIR$/sample" />
-            <option value="$PROJECT_DIR$/textreader" />
           </set>
         </option>
       </GradleProjectSettings>

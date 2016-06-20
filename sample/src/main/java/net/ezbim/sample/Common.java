@@ -11,8 +11,8 @@ import java.io.File;
  * @description
  */
 public class Common {
-    public static String pdfPathFolder = Environment.getExternalStorageDirectory() + File.separator + "sample" + File.separator + "pdf";
-    public static String picPathFolder = Environment.getExternalStorageDirectory() + File.separator + "sample" + File.separator + "pic";
-    public static String txtPathFolder = Environment.getExternalStorageDirectory() + File.separator + "sample" + File.separator + "txt";
-    public static String officePathFolder = Environment.getExternalStorageDirectory() + File.separator + "sample" + File.separator + "office";
+    public static final String pdfPathFolder = Environment.getExternalStorageDirectory() + File.separator + "sample" + File.separator + "pdf";
+    public static final String picPathFolder = Environment.getExternalStorageDirectory() + File.separator + "sample" + File.separator + "pic";
+    public static final String txtPathFolder = Environment.getExternalStorageDirectory() + File.separator + "sample" + File.separator + "txt";
+    public static final String officePathFolder = Environment.getExternalStorageDirectory() + File.separator + "sample" + File.separator + "office";
 }

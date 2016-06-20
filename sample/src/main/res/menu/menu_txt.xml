@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fontsize"
+        android:icon="@drawable/menu_font_size"
+        android:title="字体" />
+    <item
+        android:id="@+id/nowprogress"
+        android:icon="@drawable/cartoon_jump"
+        android:title="跳转" />
+</menu>

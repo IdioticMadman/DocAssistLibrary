@@ -11,7 +11,6 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Region;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Scroller;
@@ -64,20 +63,11 @@ public class PageWidget extends View {
 	Paint mPaint;
 
 	Scroller mScroller;
-	Handler handler;
-	
-	
-	public Handler getHandler() {
-		return handler;
-	}
 
-	public void setHandler(Handler handler) {
-		this.handler = handler;
-	}
-
-	public PageWidget(Context context) {
+	public PageWidget(Context context, int w, int h) {
 		super(context);
-		// TODO Auto-generated constructor stub
+		mWidth = w;
+		mHeight = h;
 		mPath0 = new Path();
 		mPath1 = new Path();
 		createDrawable();
@@ -117,7 +107,6 @@ public class PageWidget extends View {
 	}
 
 	public boolean doTouchEvent(MotionEvent event) {
-		// TODO Auto-generated method stub
 		if (event.getAction() == MotionEvent.ACTION_MOVE) {
 			mTouch.x = event.getX();
 			mTouch.y = event.getY();
@@ -368,12 +357,12 @@ public class PageWidget extends View {
 			degree = Math.PI
 					/ 4
 					- Math.atan2(mBezierControl1.y - mTouch.y, mTouch.x
-							- mBezierControl1.x);
+					- mBezierControl1.x);
 		} else {
 			degree = Math.PI
 					/ 4
 					- Math.atan2(mTouch.y - mBezierControl1.y, mTouch.x
-							- mBezierControl1.x);
+					- mBezierControl1.x);
 		}
 		// 翻起页阴影顶点与touch点的距离
 		double d1 = (float) 25 * 1.414 * Math.cos(degree);
@@ -566,17 +555,6 @@ public class PageWidget extends View {
 		if (mCornerX > 0)
 			return false;
 		return true;
-	}
-	
-	public void updateBookUI(){
-		handler.post(new Runnable(){
-
-			@Override
-			public void run() {
-				invalidate();
-			}
-			
-		});
 	}
 
 }
