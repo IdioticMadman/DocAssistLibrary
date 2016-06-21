@@ -1,10 +1,9 @@
 package net.ezbim.sample.activity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +11,7 @@ import android.view.MenuItem;
 import net.ezbim.docassist.pdfium.PDFView;
 import net.ezbim.docassist.pdfium.ScrollBar;
 import net.ezbim.docassist.pdfium.listener.OnPageChangeListener;
+import net.ezbim.docassist.utils.FileUtil;
 import net.ezbim.sample.R;
 
 public class PDfViewActivity extends AppCompatActivity implements OnPageChangeListener {
@@ -22,8 +22,9 @@ public class PDfViewActivity extends AppCompatActivity implements OnPageChangeLi
     private static String pdfFileName = "adobe.pdf";
     private PDFView pdfView;
     private ScrollBar scrollBar;
-    private int pageNumber;
+    private int pageNumber = 1;
     private Uri uri;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class PDfViewActivity extends AppCompatActivity implements OnPageChangeLi
         setContentView(R.layout.activity_pdf_view);
         setTitle("PDFViewDemo");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mContext = PDfViewActivity.this;
         initView();
         initData();
     }
@@ -62,7 +64,7 @@ public class PDfViewActivity extends AppCompatActivity implements OnPageChangeLi
         //pdfFileName = assetFileName;
 
         pdfView.fromAsset(assetFileName)
-                .defaultPage(1)
+                .defaultPage(pageNumber)
                 .onPageChange(this)
                 .swipeVertical(true)
                 .showMinimap(false)
@@ -70,7 +72,8 @@ public class PDfViewActivity extends AppCompatActivity implements OnPageChangeLi
     }
 
     private void displayFromUri(Uri uri) {
-        pdfFileName = getFileName(uri);
+
+        pdfFileName = FileUtil.getFileName(mContext, uri);
 
         pdfView.fromUri(uri)
                 .defaultPage(pageNumber)
@@ -81,30 +84,9 @@ public class PDfViewActivity extends AppCompatActivity implements OnPageChangeLi
     }
 
 
-    public String getFileName(Uri uri) {
-        String result = null;
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-        }
-        if (result == null) {
-            result = uri.getLastPathSegment();
-        }
-        return result;
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_pdfview, menu);
+        getMenuInflater().inflate(R.menu.menu_open, menu);
         return true;
     }
 

@@ -14,9 +14,9 @@
 		android:text="@string/progress_o"/>
 	<SeekBar
 		android:id="@+id/seek"
-		android:layout_width="fill_parent"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_margin="10dip"
-		android:max="10"
+		android:max="100"
 		android:progress="0"/> 
 </LinearLayout>

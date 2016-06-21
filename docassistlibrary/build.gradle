@@ -22,6 +22,9 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    //pdf解析依赖库
     compile 'com.github.barteksc:pdfium-android:1.0.3'
+    //字符编码检测
     compile files('libs/juniversalchardet-1.0.3.jar')
 }

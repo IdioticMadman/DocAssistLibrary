@@ -2,7 +2,10 @@ package net.ezbim.sample.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 
 import net.ezbim.docassist.txt.TxtActivity;
 import net.ezbim.docassist.txt.bean.BookInfo;
+import net.ezbim.docassist.utils.FileUtil;
 import net.ezbim.sample.R;
 
 import java.io.File;
@@ -24,15 +28,21 @@ import java.io.IOException;
  */
 public class TxtDemoActivity extends TxtActivity {
 
+    private static final int REQUEST_CODE = 50;
+    private Uri uri;
+    private String bookName;
+    private String bookPath;
+
     @Override
     public String getBookPath() {
-        return Environment.getExternalStorageDirectory() + File.separator + "sample" + File.separator + "txt/";
+        bookPath = Environment.getExternalStorageDirectory() + File.separator + "sample" + File.separator + "txt/";
+        return bookPath;
     }
 
     @Override
     public BookInfo setBook() {
-
-        return new BookInfo(1, "abc.txt", 1);
+        bookName = "abc.txt";
+        return new BookInfo(1, bookName, 1);
 
     }
 
@@ -41,19 +51,53 @@ public class TxtDemoActivity extends TxtActivity {
         return "TxtDemo";
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {// 创建菜单
+    // 创建菜单
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_txt, menu);
         return true;
     }
 
+    //选择文件后，activity返回结果
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            uri = data.getData();
+            displayFromUri(uri);
+        }
+    }
+
+    /**
+     * 根据uri打开文件
+     *
+     * @param uri 文件的uri
+     */
+    private void displayFromUri(Uri uri) {
+
+        bookName = FileUtil.getFileName(mContext, uri);
+        if (bookName.endsWith(".txt")) {
+            bookPath = FileUtil.getFilePath(mContext, uri);
+            openFile(bookPath, bookName);
+        } else {
+            Snackbar.make(mPageWidget, "请打开txt文件", Snackbar.LENGTH_SHORT).show();
+        }
+
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {// 操作菜单
         int ID = item.getItemId();
         switch (ID) {
+            //选择文件
+            case R.id.pickFile:
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("text/plain");
+                startActivityForResult(intent, REQUEST_CODE);
+                break;
+            //返回上一层
             case android.R.id.home:
                 onBackPressed();
                 break;
+            //设置字体大小
             case R.id.fontsize:
                 new AlertDialog.Builder(this)
                         .setTitle("请选择")
@@ -72,6 +116,7 @@ public class TxtDemoActivity extends TxtActivity {
                         .setNegativeButton("取消", null)
                         .show();
                 break;
+            //跳转进度
             case R.id.nowprogress:
                 LayoutInflater inflater = getLayoutInflater();
                 final View layout = inflater.inflate(net.ezbim.docassist.R.layout.bar, (ViewGroup) findViewById(net.ezbim.docassist.R.id.seekbar));

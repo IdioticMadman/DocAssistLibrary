@@ -2,13 +2,10 @@ package net.ezbim.docassist.txt;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -22,8 +19,8 @@ import android.widget.Toast;
 
 import net.ezbim.docassist.R;
 import net.ezbim.docassist.txt.bean.BookInfo;
-import net.ezbim.docassist.txt.bean.SetupInfo;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -33,9 +30,9 @@ public abstract class TxtActivity extends AppCompatActivity {
     /**
      * Called when the activity is first created.
      */
-    public final static int OPENMARK = 0;
-    public final static int SAVEMARK = 1;
-    public final static int TEXTSET = 2;
+    //public final static int OPENMARK = 0;
+    //public final static int SAVEMARK = 1;
+    //public final static int TEXTSET = 2;
 
     protected PageWidget mPageWidget;
     protected Bitmap mCurPageBitmap, mNextPageBitmap;
@@ -47,13 +44,16 @@ public abstract class TxtActivity extends AppCompatActivity {
     protected int txtProgress = 0;//当前阅读的进度
 
     protected final String[] font = new String[]{"40", "46", "50", "56", "60", "66", "70"};
-    protected int curPostion;
-    protected DbHelper db;
+    //protected int curPostion;
+    //protected DbHelper db;
     protected Context mContext;
-    protected Cursor mCursor;
+    //protected Cursor mCursor;
     protected BookInfo book = null;
-    protected SetupInfo setup = null;
+    // protected SetupInfo setup = null;
     private int actionBarHeight;
+    private int widthPixels;
+    private int heightPixels;
+    private String bookPath;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,22 +73,22 @@ public abstract class TxtActivity extends AppCompatActivity {
         Display display = getWindowManager().getDefaultDisplay();
         DisplayMetrics dm = new DisplayMetrics();
         display.getMetrics(dm);
-        int w = dm.widthPixels;
-        int h = dm.heightPixels - this.actionBarHeight;
-        System.out.println(w + "\t" + h);
-        mCurPageBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);//当前页位图
-        mNextPageBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);//下一页位图
+        widthPixels = dm.widthPixels;
+        heightPixels = dm.heightPixels - this.actionBarHeight;
+        System.out.println(widthPixels + "\t" + heightPixels);
+        mCurPageBitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);//当前页位图
+        mNextPageBitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);//下一页位图
 
         mCurPageCanvas = new Canvas(mCurPageBitmap);//显示当前页位图
         mNextPageCanvas = new Canvas(mNextPageBitmap);//显示下一页位图
-        pagefactory = new BookPageFactory(w, h);
+        pagefactory = new BookPageFactory(widthPixels, heightPixels);
         pagefactory.setBgBitmap(BitmapFactory.decodeResource(getResources(),
                 R.drawable.bg));
 
         //取得传递的参数
         Intent intent = getIntent();
         String bookid = intent.getStringExtra("bookid");
-        db = new DbHelper(mContext);
+        //db = new DbHelper(mContext);
 //        try {
 //            book = db.getBookInfo(Integer.parseInt(bookid));
 //            setup = db.getSetupInfo();
@@ -96,11 +96,22 @@ public abstract class TxtActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
         book = setBook();
-        if (book != null) {
+        bookPath = getBookPath() + book.bookname;
+        display();
+    }
+
+    public void openFile(String bookPath, String bookname) {
+        this.book.bookname = bookname;
+        this.bookPath = bookPath;
+        display();
+    }
+
+    public void display() {
+        if (new File(bookPath).exists()) {
             pagefactory.setFileName(book.bookname);
-            mPageWidget = new PageWidget(this, w, h);
+            mPageWidget = new PageWidget(this, widthPixels, heightPixels);
             setContentView(mPageWidget);
-            pagefactory.openbook(getBookPath() + book.bookname);
+            pagefactory.openbook(bookPath);
             int m_mbBufLen = pagefactory.getBufLen();
 
             if (book.bookmark > 0) {
@@ -120,7 +131,7 @@ public abstract class TxtActivity extends AppCompatActivity {
                 mPageWidget.setBitmaps(mNextPageBitmap, mNextPageBitmap);
                 //mPageWidget.invalidate();
                 mPageWidget.postInvalidate();
-                db.close();
+                //db.close();
             } else {
                 pagefactory.onDraw(mCurPageCanvas);
                 //setContentView(mPageWidget);
@@ -169,8 +180,10 @@ public abstract class TxtActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Toast.makeText(mContext, "电子书不存在！可能已经删除", Toast.LENGTH_SHORT).show();
-            TxtActivity.this.finish();
+            View errorView = getLayoutInflater().inflate(R.layout.open_error, null);
+            setContentView(errorView);
+            //Snackbar.make(errorView, "电子书不存在！可能已经删除", Snackbar.LENGTH_SHORT).show();
+            //TxtActivity.this.finish();
         }
     }
 
@@ -213,72 +226,72 @@ public abstract class TxtActivity extends AppCompatActivity {
         //pagefactory.createLog();
         //System.out.println("TabHost_Index.java onKeyDown");
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            addBookMark();
+            //addBookMark();
             this.finish();
         }
         return false;
     }
 
-    //添加书签
-    public void addBookMark() {
-        Message msg = new Message();
-        msg.what = SAVEMARK;
-        msg.arg1 = whichSize;
-        curPostion = pagefactory.getCurPostion();
-        msg.arg2 = curPostion;
-        mhHandler.sendMessage(msg);
-    }
-
-    Handler mhHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-
-                case TEXTSET:
-                    pagefactory.changBackGround(msg.arg1);
-                    pagefactory.onDraw(mCurPageCanvas);
-                    mPageWidget.postInvalidate();
-                    break;
-
-                case OPENMARK:
-                    try {
-                        mCursor = db.select();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if (mCursor.getCount() > 0) {
-                        mCursor.moveToPosition(mCursor.getCount() - 1);
-                        String pos = mCursor.getString(2);
-                        String tmp = mCursor.getString(1);
-
-                        pagefactory.setBeginPos(Integer.valueOf(pos));
-                        try {
-                            pagefactory.prePage();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        pagefactory.onDraw(mNextPageCanvas);
-                        mPageWidget.setBitmaps(mCurPageBitmap, mNextPageBitmap);
-                        mPageWidget.invalidate();
-                        db.close();
-                    }
-                    break;
-
-                case SAVEMARK:
-                    try {
-                        db.update(book.id, book.bookname, String.valueOf(msg.arg2));
-                        db.updateSetup(setup.id, String.valueOf(msg.arg1), "0", "0");
-                        //mCursor = db.select();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    db.close();
-                    break;
-
-                default:
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
+//    //添加书签
+//    public void addBookMark() {
+//        Message msg = new Message();
+//        msg.what = SAVEMARK;
+//        msg.arg1 = whichSize;
+//        curPostion = pagefactory.getCurPostion();
+//        msg.arg2 = curPostion;
+//        mhHandler.sendMessage(msg);
+//    }
+//
+//    Handler mhHandler = new Handler() {
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//
+//                case TEXTSET:
+//                    pagefactory.changBackGround(msg.arg1);
+//                    pagefactory.onDraw(mCurPageCanvas);
+//                    mPageWidget.postInvalidate();
+//                    break;
+//
+//                case OPENMARK:
+//                    try {
+//                        mCursor = db.select();
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    if (mCursor.getCount() > 0) {
+//                        mCursor.moveToPosition(mCursor.getCount() - 1);
+//                        String pos = mCursor.getString(2);
+//                        String tmp = mCursor.getString(1);
+//
+//                        pagefactory.setBeginPos(Integer.valueOf(pos));
+//                        try {
+//                            pagefactory.prePage();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        pagefactory.onDraw(mNextPageCanvas);
+//                        mPageWidget.setBitmaps(mCurPageBitmap, mNextPageBitmap);
+//                        mPageWidget.invalidate();
+//                        db.close();
+//                    }
+//                    break;
+//
+//                case SAVEMARK:
+//                    try {
+//                        db.update(book.id, book.bookname, String.valueOf(msg.arg2));
+//                        db.updateSetup(setup.id, String.valueOf(msg.arg1), "0", "0");
+//                        //mCursor = db.select();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    db.close();
+//                    break;
+//
+//                default:
+//                    break;
+//            }
+//            super.handleMessage(msg);
+//        }
+//    };
 }

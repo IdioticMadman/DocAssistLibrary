@@ -66,6 +66,7 @@ public class PDFActivity extends AppCompatActivity {
                     Toast.makeText(mContext, "文件拷贝出错", Toast.LENGTH_SHORT).show();
                 }
             });
+            //拷贝文件
             copyAsset.copy(pdfFileName, getPDFPathOnSD());
         }
     }
