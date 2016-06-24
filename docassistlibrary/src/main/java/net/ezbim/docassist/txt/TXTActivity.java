@@ -1,20 +1,30 @@
 package net.ezbim.docassist.txt;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import net.ezbim.docassist.R;
@@ -33,6 +43,7 @@ public abstract class TxtActivity extends AppCompatActivity {
     //public final static int OPENMARK = 0;
     //public final static int SAVEMARK = 1;
     //public final static int TEXTSET = 2;
+    private static final int REQUEST_CODE = 50;
 
     protected PageWidget mPageWidget;
     protected Bitmap mCurPageBitmap, mNextPageBitmap;
@@ -62,7 +73,10 @@ public abstract class TxtActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mContext = TxtActivity.this;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         setTitle(setTitle());
         //获取actionBar的高度
         TypedValue tv = new TypedValue();
@@ -223,13 +237,107 @@ public abstract class TxtActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //pagefactory.createLog();
-        //System.out.println("TabHost_Index.java onKeyDown");
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             //addBookMark();
             this.finish();
         }
         return false;
+    }
+
+    // 创建菜单
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_txt, menu);
+        return true;
+    }
+
+    // 操作菜单
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int ID = item.getItemId();
+        //选择文件
+        if (ID == R.id.pickFile) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("text/plain");
+            startActivityForResult(intent, REQUEST_CODE);
+        } else if (ID == android.R.id.home) {
+            //返回上一层
+            onBackPressed();
+        } else if (ID == R.id.fontsize) {
+            //设置字体大小
+            new AlertDialog.Builder(this)
+                    .setTitle("请选择")
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setSingleChoiceItems(font, whichSize,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    setFontSize(Integer.parseInt(font[which]));
+                                    whichSize = which;
+                                    //Toast.makeText(mContext, "您选中的是"+font[which], Toast.LENGTH_SHORT).show();
+                                    // dialog.dismiss();
+                                }
+                            }
+                    )
+                    .setNegativeButton("取消", null)
+                    .show();
+        } else if (ID == R.id.nowprogress) {
+            //跳转进度
+            LayoutInflater inflater = getLayoutInflater();
+            final View layout = inflater.inflate(R.layout.bar, (ViewGroup) findViewById(R.id.seekbar));
+            SeekBar seek = (SeekBar) layout.findViewById(R.id.seek);
+            final TextView textView = (TextView) layout.findViewById(R.id.textprogress);
+            txtProgress = pagefactory.getCurProgress();
+            seek.setProgress(txtProgress);
+            textView.setText(String.format(getString(R.string.progress), txtProgress + "%"));
+            seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                int progressBar = 0;
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    int progressBar = seekBar.getProgress();
+                    int m_mbBufLen = pagefactory.getBufLen();
+                    int pos = m_mbBufLen * progressBar / 100;
+                    if (progressBar == 0) {
+                        pos = 1;
+                    }
+                    pagefactory.setBeginPos(Integer.valueOf(pos));
+                    try {
+                        pagefactory.prePage();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //setContentView(mPageWidget);
+                    pagefactory.onDraw(mCurPageCanvas);
+                    mPageWidget.setBitmaps(mCurPageBitmap, mCurPageBitmap);
+                    //mPageWidget.invalidate();
+                    mPageWidget.postInvalidate();
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    //Toast.makeText(mContext, "StartTouch", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress,
+                                              boolean fromUser) {
+                    if (fromUser) {
+                        textView.setText(String.format(getString(R.string.progress), progress + "%"));
+                    }
+                }
+            });
+            new AlertDialog.Builder(this).setTitle("跳转").setView(layout)
+                    .setPositiveButton("确定",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Toast.makeText(mContext, "您选中的是", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                }
+                            }
+                    ).show();
+        }
+        return true;
     }
 
 //    //添加书签

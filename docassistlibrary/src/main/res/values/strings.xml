@@ -3,4 +3,5 @@
     <string name="pdfvp_ready_to_download">Ready to download</string>
     <string name="progress_o">当前进度：20%</string>
     <string name="progress">当前进度：%s</string>
+    <string name="pick_file">打开</string>
 </resources>

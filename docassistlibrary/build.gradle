@@ -27,4 +27,5 @@ dependencies {
     compile 'com.github.barteksc:pdfium-android:1.0.3'
     //字符编码检测
     compile files('libs/juniversalchardet-1.0.3.jar')
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }
