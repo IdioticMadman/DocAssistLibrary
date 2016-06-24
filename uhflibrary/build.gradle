@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile files('libs/uhf_lib.jar')
     compile 'com.android.support:design:23.4.0'
+    compile files('libs/scanSDK.jar')
 }

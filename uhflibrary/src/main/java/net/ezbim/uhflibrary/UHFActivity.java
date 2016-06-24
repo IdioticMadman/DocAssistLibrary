@@ -31,7 +31,7 @@ import java.util.List;
 public class UHFActivity extends AppCompatActivity implements View.OnClickListener {
     //控制读取的标志
     private boolean runFlag = true;
-    private boolean startFlag = false;
+    private boolean startFlag = true;
 
     //listView数据
     private ArrayList<EPC> listEPC;
@@ -39,9 +39,9 @@ public class UHFActivity extends AppCompatActivity implements View.OnClickListen
     private UhfReader reader; //超高频读写器
 
     //组件变量
-    private Button btnStartInventory;
-    private Button btnStopInventory;
-    private Button btnClear;
+//    private Button btnStartInventory;
+//    private Button btnStopInventory;
+//    private Button btnClear;
     private ListView lvItem;
     private ScreenStateReceiver screenReceiver;
     private Context mContext;
@@ -110,7 +110,7 @@ public class UHFActivity extends AppCompatActivity implements View.OnClickListen
                 }
             });
             dialog.show();
-            setAllButtonFalse();
+//            setAllButtonFalse();
             return true;
         }
 
@@ -124,21 +124,21 @@ public class UHFActivity extends AppCompatActivity implements View.OnClickListen
     /**
      * 硬件初始化失败，不允许操作
      */
-    private void setAllButtonFalse() {
-        setButtonClickable(btnClear, false);
-        setButtonClickable(btnStartInventory, false);
-        setButtonClickable(btnStopInventory, false);
-    }
+//    private void setAllButtonFalse() {
+//        setButtonClickable(btnClear, false);
+//        setButtonClickable(btnStartInventory, false);
+//        setButtonClickable(btnStopInventory, false);
+//    }
 
     /**
      * 初始化view
      */
     private void initView() {
-        btnStartInventory = (Button) findViewById(R.id.btn_start_inventory);
-        btnStopInventory = (Button) findViewById(R.id.btn_stop_inventory);
+//        btnStartInventory = (Button) findViewById(R.id.btn_start_inventory);
+//        btnStopInventory = (Button) findViewById(R.id.btn_stop_inventory);
+//        btnClear = (Button) findViewById(R.id.btn_clear);
         btnCancel = (Button) findViewById(R.id.btn_cancel);
         btnConfirm = (Button) findViewById(R.id.btn_confirm);
-        btnClear = (Button) findViewById(R.id.btn_clear);
         lvItem = (ListView) findViewById(R.id.lv_item);
         listEPC = new ArrayList<>();
     }
@@ -147,9 +147,9 @@ public class UHFActivity extends AppCompatActivity implements View.OnClickListen
      * 设置监听
      */
     private void setListener() {
-        btnClear.setOnClickListener(this);
-        btnStartInventory.setOnClickListener(this);
-        btnStopInventory.setOnClickListener(this);
+//        btnClear.setOnClickListener(this);
+//        btnStartInventory.setOnClickListener(this);
+//        btnStopInventory.setOnClickListener(this);
         btnConfirm.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         lvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -167,14 +167,8 @@ public class UHFActivity extends AppCompatActivity implements View.OnClickListen
         int viewId = v.getId();
         if (viewId == R.id.btn_start_inventory) {
             startFlag = true;
-        } else if (viewId == R.id.btn_stop_inventory) {
-            startFlag = false;
-        } else if (viewId == R.id.btn_clear) {
-            listEPC.removeAll(listEPC);
-            if (uhfBaseAdapter != null) {
-                uhfBaseAdapter.notifyDataSetChanged();
-            }
-        } else if (viewId == R.id.btn_confirm) {
+        }
+        else if (viewId == R.id.btn_confirm) {
             ArrayList<String> epcStrs = new ArrayList<>();
             for (EPC epc : listEPC) {
                 if (epc.isChecked()) {
@@ -187,8 +181,14 @@ public class UHFActivity extends AppCompatActivity implements View.OnClickListen
             finish();
         } else if (viewId == R.id.btn_cancel) {
             finish();
-        }
-
+        }// else if (viewId == R.id.btn_stop_inventory) {
+//            startFlag = false;
+//        } else if (viewId == R.id.btn_clear) {
+//            listEPC.removeAll(listEPC);
+//            if (uhfBaseAdapter != null) {
+//                uhfBaseAdapter.notifyDataSetChanged();
+//            }
+//        }
     }
 
     //设置按钮是否可用

@@ -1,6 +1,7 @@
 package net.ezbim.uhflibrary;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
@@ -63,6 +64,21 @@ public class Util {
             localFileWriterOn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private final static String SCAN_ACTION = "scan.rcv.message";
+
+    public static void registerScanReceiver(ScanReceiver scanReceiver, Context context) {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SCAN_ACTION);
+        context.registerReceiver(scanReceiver, intentFilter);
+    }
+
+    public static void unRegisterScanReceiver(ScanReceiver scanReceiver, Context context) {
+        if (scanReceiver != null) {
+            context.unregisterReceiver(scanReceiver);
+            scanReceiver = null;
         }
     }
 }

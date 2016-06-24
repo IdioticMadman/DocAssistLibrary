@@ -4,48 +4,19 @@
     android:id="@+id/rl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="5dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
+    android:layout_margin="5dp"
     android:orientation="vertical"
     tools:context="net.ezbim.uhflibrary.UHFActivity">
 
 
-    <LinearLayout
-        android:id="@+id/ll_operator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/btn_start_inventory"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_weight="1"
-            android:text="@string/start_inventory" />
-
-        <Button
-            android:id="@+id/btn_stop_inventory"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_weight="1"
-            android:text="@string/stop_inventory" />
-
-        <Button
-            android:id="@+id/btn_clear"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_weight="1"
-            android:text="@string/clear" />
-    </LinearLayout>
+    <!--<include-->
+        <!--android:id="@+id/ll_operator"-->
+        <!--android:layout="@layout/layout_operator" />-->
 
     <LinearLayout
         android:id="@+id/receive_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_operator"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
