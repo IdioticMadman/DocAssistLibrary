@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">UHFSample</string>
+    <string name="connect">连接模块</string>
+    <string name="start_inventory">开始盘存</string>
+    <string name="stop_inventory">停止盘存</string>
+    <string name="clear">清空</string>
+    <string name="id">序号</string>
+    <string name="count">次数</string>
+</resources>

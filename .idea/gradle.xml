@@ -9,17 +9,21 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/UHFSample" />
             <option value="$PROJECT_DIR$/docassistlibrary" />
             <option value="$PROJECT_DIR$/photosample" />
             <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/uhflibrary" />
           </set>
         </option>
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/UHFSample" />
             <option value="$PROJECT_DIR$/docassistlibrary" />
             <option value="$PROJECT_DIR$/photosample" />
             <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/uhflibrary" />
           </set>
         </option>
       </GradleProjectSettings>
