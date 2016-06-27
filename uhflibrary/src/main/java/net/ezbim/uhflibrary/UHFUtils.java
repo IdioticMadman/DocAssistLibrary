@@ -10,7 +10,7 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Util {
+public class UHFUtils {
 
 
     public static SoundPool sp;
@@ -19,7 +19,7 @@ public class Util {
 
     //初始化声音池
     public static void initSoundPool(Context context) {
-        Util.mContext = context;
+        UHFUtils.mContext = context;
         sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 1);
         suondMap = new HashMap<>();
         suondMap.put(1, sp.load(context, R.raw.msg, 1));
@@ -27,7 +27,7 @@ public class Util {
 
     //播放声音池声音
     public static void play(int sound, int number) {
-        AudioManager am = (AudioManager) Util.mContext.getSystemService(Util.mContext.AUDIO_SERVICE);
+        AudioManager am = (AudioManager) UHFUtils.mContext.getSystemService(UHFUtils.mContext.AUDIO_SERVICE);
         //返回当前AlarmManager最大音量
         float audioMaxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 

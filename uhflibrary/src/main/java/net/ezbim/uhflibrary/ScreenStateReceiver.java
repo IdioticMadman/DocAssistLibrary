@@ -17,14 +17,14 @@ public class ScreenStateReceiver extends BroadcastReceiver {
         //屏亮
         if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             //("1");
-            Util.controlUHFReaderPower(Util.powerOn);
+            UHFUtils.controlUHFReaderPower(UHFUtils.powerOn);
             Log.e("ScreenStateReceiver", "screen on");
 
         }//屏灭
         else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
             //reader.powerOff();
             //powerOn("0");
-            Util.controlUHFReaderPower(Util.powerOff);
+            UHFUtils.controlUHFReaderPower(UHFUtils.powerOff);
             Log.e("ScreenStateReceiver", "screen off");
         }
 

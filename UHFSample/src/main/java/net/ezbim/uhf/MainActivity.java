@@ -20,7 +20,7 @@ import com.magicrf.uhfreaderlib.reader.UhfReader;
 import net.ezbim.uhflibrary.EPC;
 import net.ezbim.uhflibrary.SPUtils;
 import net.ezbim.uhflibrary.ScreenStateReceiver;
-import net.ezbim.uhflibrary.Util;
+import net.ezbim.uhflibrary.UHFUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Thread thread = new InventoryThread();
         thread.start();
         //初始化声音池
-        Util.initSoundPool(this);
+        UHFUtils.initSoundPool(this);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 byte[] versionBytes = reader.getFirmware();
                 if (versionBytes != null) {
                     //播放提示音
-                    Util.play(1, 0);
+                    UHFUtils.play(1, 0);
                     String version = new String(versionBytes);
                     Snackbar.make(rl_root, "连接成功", Snackbar.LENGTH_SHORT).show();
                 } else {
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     epcList = reader.inventoryRealTime(); //实时盘存
                     if (epcList != null && !epcList.isEmpty()) {
                         //播放提示音
-                        //Util.play(1, 0);
+                        //UHFUtils.play(1, 0);
                         for (byte[] epc : epcList) {
                             if (epc != null) {
                                 String epcStr = Tools.Bytes2HexString(epc, epc.length);

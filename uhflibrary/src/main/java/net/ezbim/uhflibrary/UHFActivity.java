@@ -67,7 +67,7 @@ public class UHFActivity extends AppCompatActivity implements View.OnClickListen
         setListener();
         setTitle("请选择");
         //开启电源
-        Util.controlUHFReaderPower(Util.powerOn);
+        UHFUtils.controlUHFReaderPower(UHFUtils.powerOn);
         if (initUHFReader()) return;
 
         registerScreenRece();
@@ -75,7 +75,7 @@ public class UHFActivity extends AppCompatActivity implements View.OnClickListen
         Thread thread = new InventoryThread();
         thread.start();
         //初始化声音池
-        Util.initSoundPool(this);
+        UHFUtils.initSoundPool(this);
     }
 
     @Override
@@ -217,7 +217,7 @@ public class UHFActivity extends AppCompatActivity implements View.OnClickListen
                     epcList = reader.inventoryRealTime(); //实时盘存
                     if (epcList != null && !epcList.isEmpty()) {
                         //播放提示音
-                        //Util.play(1, 0);
+                        //UHFUtils.play(1, 0);
                         for (byte[] epc : epcList) {
                             if (epc != null) {
                                 String epcStr = Tools.Bytes2HexString(epc, epc.length);
@@ -345,6 +345,6 @@ public class UHFActivity extends AppCompatActivity implements View.OnClickListen
 
         super.onDestroy();
         //关闭电源
-        Util.controlUHFReaderPower(Util.powerOff);
+        UHFUtils.controlUHFReaderPower(UHFUtils.powerOff);
     }
 }

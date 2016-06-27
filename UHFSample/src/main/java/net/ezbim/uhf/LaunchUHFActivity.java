@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 import net.ezbim.uhflibrary.ScanReceiver;
 import net.ezbim.uhflibrary.UHFActivity;
-import net.ezbim.uhflibrary.Util;
+import net.ezbim.uhflibrary.UHFUtils;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class LaunchUHFActivity extends AppCompatActivity {
                 et.append(result);
             }
         });
-        Util.registerScanReceiver(scanReceiver, mContext);
+        UHFUtils.registerScanReceiver(scanReceiver, mContext);
     }
 
     public void activity(View view) {
@@ -70,6 +70,6 @@ public class LaunchUHFActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Util.unRegisterScanReceiver(scanReceiver, mContext);
+        UHFUtils.unRegisterScanReceiver(scanReceiver, mContext);
     }
 }
